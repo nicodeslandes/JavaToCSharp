@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -16,7 +17,7 @@ namespace JavaToCSharp.Statements
 
             var syntaxes = StatementVisitor.VisitStatements(context, stmts);
 
-            return Syntax.Block(syntaxes);
+            return SyntaxFactory.Block(syntaxes);
         }
     }
 }

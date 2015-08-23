@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -15,9 +16,9 @@ namespace JavaToCSharp.Expressions
             string value = expr.toString();
 
             if (value.StartsWith("0x"))
-                return Syntax.LiteralExpression(SyntaxKind.NumericLiteralExpression, Syntax.Literal(value, Convert.ToInt32(value.Substring(2), 16)));
+                return SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(value, Convert.ToInt32(value.Substring(2), 16)));
             else
-                return Syntax.LiteralExpression(SyntaxKind.NumericLiteralExpression, Syntax.Literal(int.Parse(expr.toString())));
+                return SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(int.Parse(expr.toString())));
         }
     }
 }

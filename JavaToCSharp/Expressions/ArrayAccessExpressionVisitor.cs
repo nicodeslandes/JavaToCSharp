@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -18,7 +19,9 @@ namespace JavaToCSharp.Expressions
             var indexExpr = expr.getIndex();
             var indexSyntax = ExpressionVisitor.VisitExpression(context, indexExpr);
 
-            return Syntax.ElementAccessExpression(nameSyntax, Syntax.BracketedArgumentList(Syntax.SeparatedList(Syntax.Argument(indexSyntax))));
+            return SyntaxFactory.ElementAccessExpression(nameSyntax,
+                SyntaxFactory.BracketedArgumentList(
+                    SyntaxFactory.SeparatedList<ArgumentSyntax>().Add(SyntaxFactory.Argument(indexSyntax))));
         }
     }
 }

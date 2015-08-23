@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -15,7 +16,7 @@ namespace JavaToCSharp.Statements
             if (!string.IsNullOrEmpty(brk.getId()))
                 context.Options.Warning("Break with label detected, using plain break instead. Check for correctness.", brk.getBeginLine());
 
-            return Syntax.BreakStatement();
+            return SyntaxFactory.BreakStatement();
         }
     }
 }

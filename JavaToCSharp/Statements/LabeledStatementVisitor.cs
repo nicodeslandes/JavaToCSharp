@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -18,7 +19,7 @@ namespace JavaToCSharp.Statements
             if (syntax == null)
                 return null;
 
-            return Syntax.LabeledStatement(labeledStmt.getLabel(), syntax);
+            return SyntaxFactory.LabeledStatement(labeledStmt.getLabel(), syntax);
         }
     }
 }

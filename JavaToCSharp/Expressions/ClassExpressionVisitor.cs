@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -14,7 +15,7 @@ namespace JavaToCSharp.Expressions
         {
             var type = TypeHelper.ConvertType(expr.getType().toString());
 
-            return Syntax.TypeOfExpression(Syntax.ParseTypeName(type));
+            return SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName(type));
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -15,7 +16,7 @@ namespace JavaToCSharp.Statements
             if (!string.IsNullOrEmpty(cnt.getId()))
                 context.Options.Warning("Continue with label detected, using plain continue instead. Check for correctness.", cnt.getBeginLine());
 
-            return Syntax.ContinueStatement();
+            return SyntaxFactory.ContinueStatement();
         }
     }
 }

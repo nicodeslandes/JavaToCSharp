@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -32,10 +33,10 @@ namespace JavaToCSharp.Statements
 
                         var vars = varExpr.getVars()
                             .ToList<VariableDeclarator>()
-                            .Select(i => Syntax.VariableDeclarator(i.toString()))
+                            .Select(i => SyntaxFactory.VariableDeclarator(i.toString()))
                             .ToArray();
 
-                        varSyntax = Syntax.VariableDeclaration(Syntax.ParseTypeName(type), Syntax.SeparatedList(vars, Enumerable.Repeat(Syntax.Token(SyntaxKind.CommaToken), vars.Length - 1)));
+                        varSyntax = SyntaxFactory.VariableDeclaration(SyntaxFactory.ParseTypeName(type), SyntaxFactory.SeparatedList(vars, Enumerable.Repeat(SyntaxFactory.Token(SyntaxKind.CommaToken), vars.Length - 1)));
                     }
                     else
                     {
@@ -66,7 +67,7 @@ namespace JavaToCSharp.Statements
             if (bodySyntax == null)
                 return null;
 
-            return Syntax.ForStatement(bodySyntax)
+            return SyntaxFactory.ForStatement(bodySyntax)
                 .WithDeclaration(varSyntax)
                 .AddInitializers(initSyntaxes.ToArray())
                 .WithCondition(conditionSyntax)

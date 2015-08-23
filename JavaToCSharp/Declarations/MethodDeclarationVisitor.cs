@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Declarations
 {
@@ -22,20 +24,20 @@ namespace JavaToCSharp.Declarations
             var methodName = TypeHelper.Capitalize(methodDecl.getName());
             methodName = TypeHelper.ReplaceCommonMethodNames(methodName);
 
-            var methodSyntax = Syntax.MethodDeclaration(Syntax.ParseTypeName(returnTypeName), methodName);
+            var methodSyntax = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName(returnTypeName), methodName);
 
             var mods = methodDecl.getModifiers();
 
             if (mods.HasFlag(Modifier.PUBLIC))
-                methodSyntax = methodSyntax.AddModifiers(Syntax.Token(SyntaxKind.PublicKeyword));
+                methodSyntax = methodSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
             if (mods.HasFlag(Modifier.PROTECTED))
-                methodSyntax = methodSyntax.AddModifiers(Syntax.Token(SyntaxKind.ProtectedKeyword));
+                methodSyntax = methodSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.ProtectedKeyword));
             if (mods.HasFlag(Modifier.PRIVATE))
-                methodSyntax = methodSyntax.AddModifiers(Syntax.Token(SyntaxKind.PrivateKeyword));
+                methodSyntax = methodSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
             if (mods.HasFlag(Modifier.STATIC))
-                methodSyntax = methodSyntax.AddModifiers(Syntax.Token(SyntaxKind.StaticKeyword));
+                methodSyntax = methodSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
             if (mods.HasFlag(Modifier.ABSTRACT))
-                methodSyntax = methodSyntax.AddModifiers(Syntax.Token(SyntaxKind.AbstractKeyword));
+                methodSyntax = methodSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.AbstractKeyword));
 
             var annotations = methodDecl.getAnnotations().ToList<AnnotationExpr>();
             bool isOverride = false;
@@ -49,7 +51,7 @@ namespace JavaToCSharp.Declarations
                     string name = annotation.getName().getName();
                     if (name == "Override")
                     {
-                        methodSyntax = methodSyntax.AddModifiers(Syntax.Token(SyntaxKind.OverrideKeyword));
+                        methodSyntax = methodSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.OverrideKeyword));
                         isOverride = true;
                     }
                 }
@@ -60,8 +62,8 @@ namespace JavaToCSharp.Declarations
                 && !mods.HasFlag(Modifier.STATIC)
                 && !mods.HasFlag(Modifier.PRIVATE)
                 && !isOverride
-                && !classSyntax.Modifiers.Any(i => i.Kind == SyntaxKind.SealedKeyword))
-                methodSyntax = methodSyntax.AddModifiers(Syntax.Token(SyntaxKind.VirtualKeyword));
+                && !classSyntax.Modifiers.Any(i => i.Kind() == SyntaxKind.SealedKeyword))
+                methodSyntax = methodSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.VirtualKeyword));
 
             var parameters = methodDecl.getParameters().ToList<Parameter>();
 
@@ -77,15 +79,15 @@ namespace JavaToCSharp.Declarations
                     if ((param.getId().getArrayCount() > 0 && !typeName.EndsWith("[]")) || param.isVarArgs())
                         typeName += "[]";
 
-                    SyntaxTokenList modifiers = Syntax.TokenList();
+                    SyntaxTokenList modifiers = SyntaxFactory.TokenList();
 
                     if (param.isVarArgs())
-                        modifiers = Syntax.TokenList(Syntax.Token(SyntaxKind.ParamsKeyword));
+                        modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.ParamsKeyword));
 
-                    var paramSyntax = Syntax.Parameter(attributeLists: null,
+                    var paramSyntax = SyntaxFactory.Parameter(attributeLists: SyntaxFactory.List<AttributeListSyntax>(),
                         modifiers: modifiers,
-                        type: Syntax.ParseTypeName(typeName),
-                        identifier: Syntax.ParseToken(identifier),
+                        type: SyntaxFactory.ParseTypeName(typeName),
+                        identifier: SyntaxFactory.ParseToken(identifier),
                         @default: null);
 
                     paramSyntaxes.Add(paramSyntax);
@@ -99,7 +101,7 @@ namespace JavaToCSharp.Declarations
             if (block == null)
             {
                 // i.e. abstract method
-                methodSyntax = methodSyntax.WithSemicolonToken(Syntax.Token(SyntaxKind.SemicolonToken));
+                methodSyntax = methodSyntax.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
                 return methodSyntax;
             }
@@ -111,15 +113,15 @@ namespace JavaToCSharp.Declarations
             if (mods.HasFlag(Modifier.SYNCHRONIZED))
             {
                 LockStatementSyntax lockSyntax;
-                BlockSyntax lockBlock = Syntax.Block(statementSyntax);
+                BlockSyntax lockBlock = SyntaxFactory.Block(statementSyntax);
 
                 if (mods.HasFlag(Modifier.STATIC))
                 {
-                    lockSyntax = Syntax.LockStatement(Syntax.TypeOfExpression(Syntax.ParseTypeName(classSyntax.Identifier.Value.ToString())), lockBlock);
+                    lockSyntax = SyntaxFactory.LockStatement(SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName(classSyntax.Identifier.Value.ToString())), lockBlock);
                 }
                 else
                 {
-                    lockSyntax = Syntax.LockStatement(Syntax.ThisExpression(), lockBlock);
+                    lockSyntax = SyntaxFactory.LockStatement(SyntaxFactory.ThisExpression(), lockBlock);
                 }
 
                 methodSyntax = methodSyntax.AddBodyStatements(lockSyntax);
@@ -140,25 +142,25 @@ namespace JavaToCSharp.Declarations
             var methodName = TypeHelper.Capitalize(methodDecl.getName());
             methodName = TypeHelper.ReplaceCommonMethodNames(methodName);
 
-            var methodSyntax = Syntax.MethodDeclaration(Syntax.ParseTypeName(returnTypeName), methodName);
+            var methodSyntax = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName(returnTypeName), methodName);
 
             var parameters = methodDecl.getParameters().ToList<Parameter>();
 
             if (parameters != null && parameters.Count > 0)
             {
                 var paramSyntax = parameters.Select(i =>
-                    Syntax.Parameter(
-                        attributeLists: null,
-                        modifiers: Syntax.TokenList(),
-                        type: Syntax.ParseTypeName(TypeHelper.ConvertType(i.getType().toString())),
-                        identifier: Syntax.ParseToken(TypeHelper.ConvertIdentifierName(i.getId().toString())),
+                    SyntaxFactory.Parameter(
+                        attributeLists: SyntaxFactory.List<AttributeListSyntax>(),
+                        modifiers: SyntaxFactory.TokenList(),
+                        type: SyntaxFactory.ParseTypeName(TypeHelper.ConvertType(i.getType().toString())),
+                        identifier: SyntaxFactory.ParseToken(TypeHelper.ConvertIdentifierName(i.getId().toString())),
                         @default: null))
                     .ToArray();
 
                 methodSyntax = methodSyntax.AddParameterListParameters(paramSyntax.ToArray());
             }
 
-            methodSyntax = methodSyntax.WithSemicolonToken(Syntax.Token(SyntaxKind.SemicolonToken));
+            methodSyntax = methodSyntax.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
             return methodSyntax;
         }

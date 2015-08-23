@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -13,9 +14,9 @@ namespace JavaToCSharp.Expressions
         public override ExpressionSyntax Visit(ConversionContext context, BooleanLiteralExpr expr)
         {
             if (expr.getValue())
-                return Syntax.LiteralExpression(SyntaxKind.TrueLiteralExpression);
+                return SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression);
             else
-                return Syntax.LiteralExpression(SyntaxKind.FalseLiteralExpression);
+                return SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
         }
     }
 }

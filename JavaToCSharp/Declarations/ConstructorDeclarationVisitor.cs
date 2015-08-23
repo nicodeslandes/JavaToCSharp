@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Declarations
 {
@@ -17,17 +19,17 @@ namespace JavaToCSharp.Declarations
     {
         public override MemberDeclarationSyntax VisitForClass(ConversionContext context, ClassDeclarationSyntax classSyntax, ConstructorDeclaration ctorDecl)
         {
-            var ctorSyntax = Syntax.ConstructorDeclaration(classSyntax.Identifier.Value.ToString())
-                .WithLeadingTrivia(Syntax.CarriageReturnLineFeed);
+            var ctorSyntax = SyntaxFactory.ConstructorDeclaration(classSyntax.Identifier.Value.ToString())
+                .WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
             var mods = ctorDecl.getModifiers();
 
             if (mods.HasFlag(Modifier.PUBLIC))
-                ctorSyntax = ctorSyntax.AddModifiers(Syntax.Token(SyntaxKind.PublicKeyword));
+                ctorSyntax = ctorSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
             if (mods.HasFlag(Modifier.PROTECTED))
-                ctorSyntax = ctorSyntax.AddModifiers(Syntax.Token(SyntaxKind.ProtectedKeyword));
+                ctorSyntax = ctorSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.ProtectedKeyword));
             if (mods.HasFlag(Modifier.PRIVATE))
-                ctorSyntax = ctorSyntax.AddModifiers(Syntax.Token(SyntaxKind.PrivateKeyword));
+                ctorSyntax = ctorSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
 
             var parameters = ctorDecl.getParameters().ToList<Parameter>();
 
@@ -37,16 +39,16 @@ namespace JavaToCSharp.Declarations
 
                 foreach (var param in parameters)
                 {
-                    var paramSyntax = Syntax.Parameter(Syntax.ParseToken(TypeHelper.ConvertIdentifierName(param.getId().toString())));
+                    var paramSyntax = SyntaxFactory.Parameter(SyntaxFactory.ParseToken(TypeHelper.ConvertIdentifierName(param.getId().toString())));
 
                     if (param.isVarArgs())
                     {
-                        paramSyntax = paramSyntax.WithType(Syntax.ParseTypeName(TypeHelper.ConvertType(param.getType().toString()) + "[]"))
-                            .WithModifiers(Syntax.TokenList(Syntax.Token(SyntaxKind.ParamsKeyword)));
+                        paramSyntax = paramSyntax.WithType(SyntaxFactory.ParseTypeName(TypeHelper.ConvertType(param.getType().toString()) + "[]"))
+                            .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.ParamsKeyword)));
                     }
                     else
                     {
-                        paramSyntax = paramSyntax.WithType(Syntax.ParseTypeName(TypeHelper.ConvertType(param.getType().toString())));
+                        paramSyntax = paramSyntax.WithType(SyntaxFactory.ParseTypeName(TypeHelper.ConvertType(param.getType().toString())));
                     }
 
                     paramSyntaxes.Add(paramSyntax);
@@ -75,18 +77,18 @@ namespace JavaToCSharp.Declarations
                     foreach (var arg in initargs)
                     {
                         var argsyn = ExpressionVisitor.VisitExpression(context, arg);
-                        initargslist.Add(Syntax.Argument(argsyn));
+                        initargslist.Add(SyntaxFactory.Argument(argsyn));
                     }
 
-                    argsSyntax = Syntax.ArgumentList(Syntax.SeparatedList(initargslist, Enumerable.Repeat(Syntax.Token(SyntaxKind.CommaToken), initargslist.Count - 1)));
+                    argsSyntax = SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(initargslist, Enumerable.Repeat(SyntaxFactory.Token(SyntaxKind.CommaToken), initargslist.Count - 1)));
                 }
 
                 ConstructorInitializerSyntax ctorinitsyn;
 
                 if (ctorInvStmt.isThis())
-                    ctorinitsyn = Syntax.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, argsSyntax);
+                    ctorinitsyn = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, argsSyntax);
                 else
-                    ctorinitsyn = Syntax.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer, argsSyntax);
+                    ctorinitsyn = SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer, argsSyntax);
 
                 ctorSyntax = ctorSyntax.WithInitializer(ctorinitsyn);
             }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -19,7 +20,7 @@ namespace JavaToCSharp.Statements
             var cases = switchStmt.getEntries().ToList<SwitchEntryStmt>();
 
             if (cases == null)
-                return Syntax.SwitchStatement(selectorSyntax, Syntax.List<SwitchSectionSyntax>());
+                return SyntaxFactory.SwitchStatement(selectorSyntax, SyntaxFactory.List<SwitchSectionSyntax>());
 
             var caseSyntaxes = new List<SwitchSectionSyntax>();
 
@@ -33,19 +34,23 @@ namespace JavaToCSharp.Statements
                 if (label == null)
                 {
                     // default case
-                    var defaultSyntax = Syntax.SwitchSection(Syntax.List(Syntax.SwitchLabel(SyntaxKind.DefaultSwitchLabel)), Syntax.List(syntaxes.AsEnumerable()));
+                    var defaultSyntax = SyntaxFactory.SwitchSection(
+                        SyntaxFactory.List<SwitchLabelSyntax>().Add(SyntaxFactory.DefaultSwitchLabel()),
+                        SyntaxFactory.List(syntaxes.AsEnumerable()));
                     caseSyntaxes.Add(defaultSyntax);
                 }
                 else
                 {
                     var labelSyntax = ExpressionVisitor.VisitExpression(context, label);
 
-                    var caseSyntax = Syntax.SwitchSection(Syntax.List(Syntax.SwitchLabel(SyntaxKind.CaseSwitchLabel, labelSyntax)), Syntax.List(syntaxes.AsEnumerable()));
+                    var caseSyntax = SyntaxFactory.SwitchSection(
+                        SyntaxFactory.List<SwitchLabelSyntax>().Add(SyntaxFactory.CaseSwitchLabel(labelSyntax)),
+                        SyntaxFactory.List(syntaxes.AsEnumerable()));
                     caseSyntaxes.Add(caseSyntax);
                 }
             }
 
-            return Syntax.SwitchStatement(selectorSyntax, Syntax.List<SwitchSectionSyntax>(caseSyntaxes));
+            return SyntaxFactory.SwitchStatement(selectorSyntax, SyntaxFactory.List<SwitchSectionSyntax>(caseSyntaxes));
         }
     }
 }

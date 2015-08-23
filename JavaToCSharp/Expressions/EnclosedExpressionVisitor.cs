@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -15,7 +16,7 @@ namespace JavaToCSharp.Expressions
             var expr = enclosedExpr.getInner();
             var exprSyntax = ExpressionVisitor.VisitExpression(context, expr);
 
-            return Syntax.ParenthesizedExpression(exprSyntax);
+            return SyntaxFactory.ParenthesizedExpression(exprSyntax);
         }
     }
 }

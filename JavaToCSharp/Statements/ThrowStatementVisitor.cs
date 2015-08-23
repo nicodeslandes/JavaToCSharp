@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -17,7 +18,7 @@ namespace JavaToCSharp.Statements
 
             var exprSyntax = ExpressionVisitor.VisitExpression(context, expr);
 
-            return Syntax.ThrowStatement(exprSyntax);
+            return SyntaxFactory.ThrowStatement(exprSyntax);
         }
     }
 }

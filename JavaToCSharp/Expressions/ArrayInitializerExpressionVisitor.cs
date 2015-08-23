@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -22,10 +23,10 @@ namespace JavaToCSharp.Expressions
                 syntaxes.Add(syntax);
 	        }
 
-            return Syntax.ImplicitArrayCreationExpression(
-                Syntax.InitializerExpression(
+            return SyntaxFactory.ImplicitArrayCreationExpression(
+                SyntaxFactory.InitializerExpression(
                     SyntaxKind.ArrayInitializerExpression, 
-                    Syntax.SeparatedList(syntaxes, Enumerable.Repeat(Syntax.Token(SyntaxKind.CommaToken), syntaxes.Count - 1))));
+                    SyntaxFactory.SeparatedList(syntaxes, Enumerable.Repeat(SyntaxFactory.Token(SyntaxKind.CommaToken), syntaxes.Count - 1))));
         }
     }
 }

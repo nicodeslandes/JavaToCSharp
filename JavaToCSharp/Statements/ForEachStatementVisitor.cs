@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -22,7 +23,7 @@ namespace JavaToCSharp.Statements
 
             var vars = varExpr.getVars()
                 .ToList<VariableDeclarator>()
-                .Select(i => Syntax.VariableDeclarator(i.toString()))
+                .Select(i => SyntaxFactory.VariableDeclarator(i.toString()))
                 .ToArray();
 
             var body = foreachStmt.getBody();
@@ -31,7 +32,7 @@ namespace JavaToCSharp.Statements
             if (bodySyntax == null)
                 return null;
 
-            return Syntax.ForEachStatement(Syntax.ParseTypeName(type), vars[0].Identifier.ValueText, iterableSyntax, bodySyntax);
+            return SyntaxFactory.ForEachStatement(SyntaxFactory.ParseTypeName(type), vars[0].Identifier.ValueText, iterableSyntax, bodySyntax);
         }
     }
 }

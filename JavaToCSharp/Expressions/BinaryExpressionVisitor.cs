@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -63,7 +64,7 @@ namespace JavaToCSharp.Expressions
             else if (op == BinaryExpr.Operator.xor)
                 kind = SyntaxKind.ExclusiveOrExpression;
 
-            return Syntax.BinaryExpression(kind, leftSyntax, rightSyntax);
+            return SyntaxFactory.BinaryExpression(kind, leftSyntax, rightSyntax);
         }
     }
 }

@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using com.github.javaparser.ast.body;
+using JavaToCSharp.Declarations;
+using JavaToCSharp.Statements;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -12,7 +16,16 @@ namespace JavaToCSharp.Expressions
     {
         public override ExpressionSyntax Visit(ConversionContext context, LambdaExpr lambdaExpr)
         {
-            return new ParenthesizedLambdaExpressionSyntax();
+            var parameters = lambdaExpr.getParameters().ToList<Parameter>();
+            var body = lambdaExpr.getBody();
+            var statementSyntax = StatementVisitor.VisitStatements(context, new[] {body});
+
+            return SyntaxFactory.ParenthesizedLambdaExpression(statementSyntax.Single())
+                .WithParameterList(
+                    SyntaxFactory.ParameterList()
+                        .AddParameters(
+                            parameters.Select(
+                                p => SyntaxFactory.Parameter(SyntaxFactory.ParseToken(p.getId().toString()))).ToArray()));
         }
     }
     
@@ -45,27 +58,27 @@ namespace JavaToCSharp.Expressions
 
             if (scopeSyntax == null)
             {
-                methodExpression = Syntax.IdentifierName(methodName);
+                methodExpression = SyntaxFactory.IdentifierName(methodName);
             }
             else
             {
-                methodExpression = Syntax.MemberAccessExpression(SyntaxKind.MemberAccessExpression, scopeSyntax, Syntax.IdentifierName(methodName));
+                methodExpression = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, scopeSyntax, SyntaxFactory.IdentifierName(methodName));
             }
 
             var args = methodCallExpr.getArgs().ToList<Expression>();
 
             if (args == null || args.Count == 0)
-                return Syntax.InvocationExpression(methodExpression);
+                return SyntaxFactory.InvocationExpression(methodExpression);
 
             var argSyntaxes = new List<ArgumentSyntax>();
 
             foreach (var arg in args)
             {
                 var argSyntax = ExpressionVisitor.VisitExpression(context, arg);
-                argSyntaxes.Add(Syntax.Argument(argSyntax));
+                argSyntaxes.Add(SyntaxFactory.Argument(argSyntax));
             }
 
-            return Syntax.InvocationExpression(methodExpression, Syntax.ArgumentList(Syntax.SeparatedList(argSyntaxes, Enumerable.Repeat(Syntax.Token(SyntaxKind.CommaToken), argSyntaxes.Count - 1))));
+            return SyntaxFactory.InvocationExpression(methodExpression, SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(argSyntaxes, Enumerable.Repeat(SyntaxFactory.Token(SyntaxKind.CommaToken), argSyntaxes.Count - 1))));
         }
     }
 }

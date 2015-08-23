@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -21,7 +22,7 @@ namespace JavaToCSharp.Expressions
             var elseExpr = conditionalExpr.getElseExpr();
             var elseSyntax = ExpressionVisitor.VisitExpression(context, elseExpr);
 
-            return Syntax.ConditionalExpression(conditionSyntax, thenSyntax, elseSyntax);
+            return SyntaxFactory.ConditionalExpression(conditionSyntax, thenSyntax, elseSyntax);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
@@ -12,7 +13,7 @@ namespace JavaToCSharp.Expressions
     {
         public override ExpressionSyntax Visit(ConversionContext context, CharLiteralExpr expr)
         {
-            return Syntax.LiteralExpression(SyntaxKind.CharacterLiteralExpression, Syntax.Literal(expr.toString().Trim('\'')[0]));
+            return SyntaxFactory.LiteralExpression(SyntaxKind.CharacterLiteralExpression, SyntaxFactory.Literal(expr.toString().Trim('\'')[0]));
         }
     }
 }

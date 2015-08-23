@@ -45,7 +45,7 @@ namespace JavaToCSharp
 
                 //foreach (var import in imports)
                 //{
-                //    var usingSyntax = Syntax.UsingDirective(Syntax.ParseName(import.getName().toString()));
+                //    var usingSyntax = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(import.getName().toString()));
                 //    usings.Add(usingSyntax);
                 //}
 
@@ -106,9 +106,9 @@ namespace JavaToCSharp
                     rootMembers.Add(namespaceSyntax);
 
                 var root = SyntaxFactory.CompilationUnit(
-                    externs: new SyntaxList<ExternAliasDirectiveSyntax>(),
+                    externs: SyntaxFactory.List<ExternAliasDirectiveSyntax>(),
                     usings: SyntaxFactory.List(usings.ToArray()),
-                    attributeLists: new SyntaxList<AttributeListSyntax>(),
+                    attributeLists: SyntaxFactory.List<AttributeListSyntax>(),
                     members: SyntaxFactory.List<MemberDeclarationSyntax>(rootMembers))
                     .NormalizeWhitespace();
 
