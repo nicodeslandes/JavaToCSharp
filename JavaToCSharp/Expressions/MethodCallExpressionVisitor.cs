@@ -1,5 +1,5 @@
-﻿using japa.parser.ast.expr;
-using Roslyn.Compilers.CSharp;
+﻿using com.github.javaparser.ast.expr;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,24 @@ using System.Threading.Tasks;
 
 namespace JavaToCSharp.Expressions
 {
+    public class LambdaExpressionVisitor : ExpressionVisitor<LambdaExpr>
+    {
+        public override ExpressionSyntax Visit(ConversionContext context, LambdaExpr lambdaExpr)
+        {
+            return new ParenthesizedLambdaExpressionSyntax();
+        }
+    }
+    
+    public class MethodReferenceExpressionVisitor : ExpressionVisitor<MethodReferenceExpr>
+    {
+        public override ExpressionSyntax Visit(ConversionContext context, MethodReferenceExpr methodReferenceExpr)
+        {
+            var scope = methodReferenceExpr.getScope();
+
+            return VisitExpression(context, scope);
+        }
+    }
+
     public class MethodCallExpressionVisitor : ExpressionVisitor<MethodCallExpr>
     {
         public override ExpressionSyntax Visit(ConversionContext context, MethodCallExpr methodCallExpr)

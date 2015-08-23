@@ -1,9 +1,9 @@
-﻿using japa.parser.ast.body;
-using japa.parser.ast.expr;
-using japa.parser.ast.stmt;
+﻿using com.github.javaparser.ast.body;
+using com.github.javaparser.ast.expr;
+using com.github.javaparser.ast.stmt;
 using java.lang.reflect;
 using JavaToCSharp.Statements;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;

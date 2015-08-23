@@ -1,5 +1,5 @@
-﻿using japa.parser.ast.body;
-using Roslyn.Compilers.CSharp;
+﻿using com.github.javaparser.ast.body;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;

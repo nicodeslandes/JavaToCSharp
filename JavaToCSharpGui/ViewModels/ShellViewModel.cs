@@ -21,7 +21,6 @@ namespace JavaToCSharpGui
         private string _javaText;
         private string _csharpText;
         private string _openPath;
-        private string _savePath;
         private string _copiedText;
         private string _conversionState;
         private bool _includeUsings = true;

@@ -1,10 +1,11 @@
-﻿using japa.parser.ast.type;
-using Roslyn.Compilers.CSharp;
+﻿using com.github.javaparser.ast.type;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp
 {
@@ -103,18 +104,18 @@ namespace JavaToCSharp
 
             typeName = ConvertType(typeName);
 
-            var typeArgs = type.getTypeArgs().ToList<japa.parser.ast.type.Type>();
+            var typeArgs = type.getTypeArgs().ToList<com.github.javaparser.ast.type.Type>();
 
             TypeSyntax typeSyntax;
 
             if (typeArgs != null && typeArgs.Count > 0)
             {
-                typeSyntax = Syntax.GenericName(typeName)
-                    .AddTypeArgumentListArguments(typeArgs.Select(i => Syntax.ParseTypeName(i.toString())).ToArray());
+                typeSyntax = SyntaxFactory.GenericName(typeName)
+                    .AddTypeArgumentListArguments(typeArgs.Select(i => SyntaxFactory.ParseTypeName(i.toString())).ToArray());
             }
             else
             {
-                typeSyntax = Syntax.ParseTypeName(typeName);
+                typeSyntax = SyntaxFactory.ParseTypeName(typeName);
             }
 
             return typeSyntax;

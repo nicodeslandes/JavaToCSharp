@@ -1,5 +1,5 @@
-﻿using japa.parser.ast.expr;
-using Roslyn.Compilers.CSharp;
+﻿using com.github.javaparser.ast.expr;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +50,8 @@ namespace JavaToCSharp.Expressions
                 { typeof(SuperExpr), new SuperExpressionVisitor() },
                 { typeof(ThisExpr), new ThisExpressionVisitor() },
                 { typeof(UnaryExpr), new UnaryExpressionVisitor() },
+                { typeof(MethodReferenceExpr), new MethodReferenceExpressionVisitor() },
+                { typeof(LambdaExpr), new LambdaExpressionVisitor() },
             };
         }
 

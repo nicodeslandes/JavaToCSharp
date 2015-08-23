@@ -1,6 +1,6 @@
-﻿using japa.parser.ast.stmt;
-using japa.parser.ast.type;
-using Roslyn.Compilers.CSharp;
+﻿using com.github.javaparser.ast.stmt;
+using com.github.javaparser.ast.type;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
