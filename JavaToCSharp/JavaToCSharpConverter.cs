@@ -5,6 +5,7 @@ using System.Text;
 using com.github.javaparser;
 using com.github.javaparser.ast;
 using com.github.javaparser.ast.body;
+using com.github.javaparser.ast.comments;
 using com.github.javaparser.ast.type;
 using ikvm.io;
 using java.lang.reflect;
@@ -256,9 +257,13 @@ namespace JavaToCSharp
                 }
             }
 
+            var comment = javac.getComment();
+            if (comment != null)
+            {
+                classSyntax = classSyntax.WithLeadingTrivia(SyntaxFactory.Comment(comment.toString()));
+            }
+
             return classSyntax;
         }
-   
-        
     }
 }

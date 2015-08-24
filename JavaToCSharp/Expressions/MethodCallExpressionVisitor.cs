@@ -5,40 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using com.github.javaparser.ast.body;
 using JavaToCSharp.Declarations;
-using JavaToCSharp.Statements;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Expressions
 {
-    public class LambdaExpressionVisitor : ExpressionVisitor<LambdaExpr>
-    {
-        public override ExpressionSyntax Visit(ConversionContext context, LambdaExpr lambdaExpr)
-        {
-            var parameters = lambdaExpr.getParameters().ToList<Parameter>();
-            var body = lambdaExpr.getBody();
-            var statementSyntax = StatementVisitor.VisitStatements(context, new[] {body});
-
-            return SyntaxFactory.ParenthesizedLambdaExpression(statementSyntax.Single())
-                .WithParameterList(
-                    SyntaxFactory.ParameterList()
-                        .AddParameters(
-                            parameters.Select(
-                                p => SyntaxFactory.Parameter(SyntaxFactory.ParseToken(p.getId().toString()))).ToArray()));
-        }
-    }
-    
-    public class MethodReferenceExpressionVisitor : ExpressionVisitor<MethodReferenceExpr>
-    {
-        public override ExpressionSyntax Visit(ConversionContext context, MethodReferenceExpr methodReferenceExpr)
-        {
-            var scope = methodReferenceExpr.getScope();
-
-            return VisitExpression(context, scope);
-        }
-    }
-
     public class MethodCallExpressionVisitor : ExpressionVisitor<MethodCallExpr>
     {
         public override ExpressionSyntax Visit(ConversionContext context, MethodCallExpr methodCallExpr)
