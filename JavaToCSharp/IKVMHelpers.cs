@@ -23,6 +23,17 @@ namespace JavaToCSharp
             return newList;
         }
 
+        public static IEnumerable<T> AsEnumerable<T>(this java.util.List list)
+        {
+            if (list == null)
+                yield break;
+
+            for (int i = 0; i < list.size(); i++)
+            {
+                yield return (T)list.get(i);
+            }
+        }
+
         public static bool HasFlag(this int value, int flag)
         {
             return (value & flag) != 0;

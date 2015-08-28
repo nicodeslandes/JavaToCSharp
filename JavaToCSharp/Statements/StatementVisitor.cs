@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace JavaToCSharp.Statements
 {
@@ -15,7 +17,7 @@ namespace JavaToCSharp.Statements
 
         protected sealed override StatementSyntax Visit(ConversionContext context, Statement statement)
         {
-            return Visit(context, (T)statement);
+            return Visit(context, (T)statement).AddComment(context, statement);
         }
     }
 
@@ -61,7 +63,10 @@ namespace JavaToCSharp.Statements
                 StatementSyntax syntax = VisitStatement(context, statement);
 
                 if (syntax != null)
+                {
+                    syntax = syntax.AddComment(context, statement);
                     syntaxes.Add(syntax);
+                }
             }
 
             return syntaxes;

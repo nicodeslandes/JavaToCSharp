@@ -97,7 +97,7 @@ namespace JavaToCSharp.Declarations
 
             ctorSyntax = ctorSyntax.AddBodyStatements(statementSyntax.ToArray());
             
-            return ctorSyntax;
+            return ctorSyntax.AddComment(context, ctorDecl);
         }
 
         public override MemberDeclarationSyntax VisitForInterface(ConversionContext context, InterfaceDeclarationSyntax interfaceSyntax, ConstructorDeclaration declaration)

@@ -22,7 +22,8 @@ namespace JavaToCSharp.Declarations
 
             return SyntaxFactory.ConstructorDeclaration(classSyntax.Identifier.ValueText)
                 .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.StaticKeyword)))
-                .WithBody(blockSyntax);
+                .WithBody(blockSyntax)
+                .AddComment(context, declaration);
         }
 
         public override MemberDeclarationSyntax VisitForInterface(ConversionContext context, InterfaceDeclarationSyntax interfaceSyntax, InitializerDeclaration declaration)

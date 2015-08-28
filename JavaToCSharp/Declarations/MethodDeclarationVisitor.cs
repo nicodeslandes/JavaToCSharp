@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using com.github.javaparser.ast;
+using com.github.javaparser.ast.comments;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -25,6 +27,8 @@ namespace JavaToCSharp.Declarations
             methodName = TypeHelper.ReplaceCommonMethodNames(methodName);
 
             var methodSyntax = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName(returnTypeName), methodName);
+
+            // TODO: Call methodDecl.getTypeParameters() to see if the method is generic
 
             var mods = methodDecl.getModifiers();
 
@@ -103,12 +107,20 @@ namespace JavaToCSharp.Declarations
                 // i.e. abstract method
                 methodSyntax = methodSyntax.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
-                return methodSyntax;
+                return methodSyntax.AddComment(context, methodDecl);
             }
 
             var statements = block.getStmts().ToList<Statement>();
-
             var statementSyntax = StatementVisitor.VisitStatements(context, statements);
+
+            // Look for comments at the end of the method body
+            var trailingComments = block
+                .getChildrenNodes().AsEnumerable<Node>()
+                .OrderByDescending(n => n.getBeginLine()).ThenByDescending(n => n.getBeginColumn())
+                .TakeWhile(n => n is Comment)
+                .Cast<Comment>()
+                .Reverse()
+                .Select(cmt => SyntaxFactory.Comment(cmt.toString().TrimEnd('\r', '\n')));
 
             if (mods.HasFlag(Modifier.SYNCHRONIZED))
             {
@@ -131,7 +143,15 @@ namespace JavaToCSharp.Declarations
                 methodSyntax = methodSyntax.AddBodyStatements(statementSyntax.ToArray());
             }
 
-            return methodSyntax;
+            // Add any trailing comments before the closing bracket
+            var closeBraceToken = methodSyntax.Body.CloseBraceToken
+                    .WithLeadingTrivia(trailingComments);
+
+            methodSyntax = methodSyntax.ReplaceNode(methodSyntax.Body,
+                    methodSyntax.Body.WithCloseBraceToken(closeBraceToken));
+            
+            return methodSyntax.AddComment(context, methodDecl);
+            // Trailing
         }
 
         public override MemberDeclarationSyntax VisitForInterface(ConversionContext context, InterfaceDeclarationSyntax interfaceSyntax, MethodDeclaration methodDecl)

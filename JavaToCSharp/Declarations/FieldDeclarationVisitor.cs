@@ -66,7 +66,7 @@ namespace JavaToCSharp.Declarations
             if (mods.HasFlag(Modifier.VOLATILE))
                 fieldSyntax = fieldSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.VolatileKeyword));
 
-            return fieldSyntax;
+            return fieldSyntax.AddComment(context, fieldDecl);
         }
 
         public override MemberDeclarationSyntax VisitForInterface(ConversionContext context, InterfaceDeclarationSyntax interfaceSyntax, FieldDeclaration declaration)

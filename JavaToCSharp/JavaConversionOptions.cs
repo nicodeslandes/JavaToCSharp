@@ -46,6 +46,8 @@ namespace JavaToCSharp
 
         public ConversionState ConversionState { get; set; }
 
+        public bool IncludeComments { get; set; }
+
         public JavaConversionOptions AddPackageReplacement(string pattern, string replacement, RegexOptions options = RegexOptions.None)
         {
             _packageReplacements.Add(new Replacement(pattern, replacement, options));

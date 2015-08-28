@@ -1,0 +1,19 @@
+﻿// Comment 10
+// Comment 11
+// Comment 12
+class A
+{
+    public static void main(){
+		int a = 34;
+
+        // Nothing
+
+        // Nothing2
+        return; // Not required
+
+		// And this is not reachable
+		return; // End of the method
+        
+        // Re-nothing
+    }
+}

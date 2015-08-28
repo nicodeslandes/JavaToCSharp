@@ -16,7 +16,7 @@ namespace JavaToCSharp.Statements
             if (!string.IsNullOrEmpty(cnt.getId()))
                 context.Options.Warning("Continue with label detected, using plain continue instead. Check for correctness.", cnt.getBeginLine());
 
-            return SyntaxFactory.ContinueStatement();
+            return SyntaxFactory.ContinueStatement().AddComment(context, cnt);
         }
     }
 }

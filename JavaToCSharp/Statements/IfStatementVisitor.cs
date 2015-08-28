@@ -34,7 +34,7 @@ namespace JavaToCSharp.Statements
             if (elseSyntax == null)
                 return SyntaxFactory.IfStatement(conditionSyntax, thenSyntax);
 
-            return SyntaxFactory.IfStatement(conditionSyntax, thenSyntax, elseSyntax);
+            return SyntaxFactory.IfStatement(conditionSyntax, thenSyntax, elseSyntax).AddComment(context, ifStmt);
         }
     }
 }

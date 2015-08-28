@@ -42,7 +42,7 @@ namespace JavaToCSharp.Declarations
             if (mods.HasFlag(Modifier.PUBLIC))
                 enumSyntax = enumSyntax.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
 
-            return enumSyntax;
+            return enumSyntax.AddComment(context, enumDecl);
         }
 
         public override MemberDeclarationSyntax VisitForInterface(ConversionContext context, InterfaceDeclarationSyntax interfaceSyntax, EnumDeclaration declaration)

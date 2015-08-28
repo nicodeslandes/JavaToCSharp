@@ -71,7 +71,8 @@ namespace JavaToCSharp.Statements
                 .WithDeclaration(varSyntax)
                 .AddInitializers(initSyntaxes.ToArray())
                 .WithCondition(conditionSyntax)
-                .AddIncrementors(incrementSyntaxes.ToArray());
+                .AddIncrementors(incrementSyntaxes.ToArray())
+                .AddComment(context, forStmt);
         }
     }
 }

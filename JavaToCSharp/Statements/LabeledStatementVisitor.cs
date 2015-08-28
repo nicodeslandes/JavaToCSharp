@@ -19,7 +19,7 @@ namespace JavaToCSharp.Statements
             if (syntax == null)
                 return null;
 
-            return SyntaxFactory.LabeledStatement(labeledStmt.getLabel(), syntax);
+            return SyntaxFactory.LabeledStatement(labeledStmt.getLabel(), syntax).AddComment(context, labeledStmt);
         }
     }
 }

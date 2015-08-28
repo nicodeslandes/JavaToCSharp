@@ -59,7 +59,7 @@ namespace JavaToCSharp.Statements
                 trySyn = trySyn.WithFinally(SyntaxFactory.FinallyClause(finallyBlockSyntax));
             }
 
-            return trySyn;
+            return trySyn.AddComment(context, tryStmt);
         }
     }
 }

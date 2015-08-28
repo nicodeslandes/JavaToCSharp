@@ -23,7 +23,7 @@ namespace JavaToCSharp.Statements
             if (bodySyntax == null)
                 return null;
 
-            return SyntaxFactory.WhileStatement(syntax, bodySyntax);
+            return SyntaxFactory.WhileStatement(syntax, bodySyntax).AddComment(context, whileStmt);
         }
     }
 }

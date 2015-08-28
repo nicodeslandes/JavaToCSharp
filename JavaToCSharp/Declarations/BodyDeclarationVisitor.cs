@@ -53,7 +53,7 @@ namespace JavaToCSharp.Declarations
             if (!_visitors.TryGetValue(declaration.GetType(), out visitor))
                 throw new InvalidOperationException("No visitor has been implemented for body declaration type " + declaration.GetType().Name);
 
-            return visitor.VisitForClass(context, classSyntax, declaration);
+            return visitor.VisitForClass(context, classSyntax, declaration).AddComment(context, declaration);
         }
 
         public static MemberDeclarationSyntax VisitBodyDeclarationForInterface(ConversionContext context, InterfaceDeclarationSyntax interfaceSyntax, BodyDeclaration declaration)
@@ -63,7 +63,7 @@ namespace JavaToCSharp.Declarations
             if (!_visitors.TryGetValue(declaration.GetType(), out visitor))
                 throw new InvalidOperationException("No visitor has been implemented for body declaration type " + declaration.GetType().Name);
 
-            return visitor.VisitForInterface(context, interfaceSyntax, declaration);
+            return visitor.VisitForInterface(context, interfaceSyntax, declaration).AddComment(context, declaration);
         }
     }
 }

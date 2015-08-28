@@ -42,6 +42,9 @@ namespace JavaToCSharp
 
         public static string Capitalize(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return name;
+
             var parts = name.Split('.');
 
             var joined = string.Join(".", parts.Select(i =>

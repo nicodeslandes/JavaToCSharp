@@ -28,7 +28,8 @@ namespace JavaToCSharp.Statements
             return SyntaxFactory.ExpressionStatement(
                     SyntaxFactory.InvocationExpression(
                         SyntaxFactory.IdentifierName("Debug.Assert"),
-                        SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(checkSyntax), SyntaxFactory.Argument(messageSyntax) }, new[] { SyntaxFactory.Token(SyntaxKind.CommaToken) }))));
+                        SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(checkSyntax), SyntaxFactory.Argument(messageSyntax) }, new[] { SyntaxFactory.Token(SyntaxKind.CommaToken) }))))
+                        .AddComment(context, assertStmt);
         }
     }
 }

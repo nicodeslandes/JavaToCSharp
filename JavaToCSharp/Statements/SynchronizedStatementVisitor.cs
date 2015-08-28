@@ -23,7 +23,7 @@ namespace JavaToCSharp.Statements
             if (bodySyntax == null)
                 return null;
 
-            return SyntaxFactory.LockStatement(lockSyntax, bodySyntax);
+            return SyntaxFactory.LockStatement(lockSyntax, bodySyntax).AddComment(context, synchronizedStmt);
         }
     }
 }
