@@ -12,7 +12,7 @@ namespace JavaToCSharp.Expressions
     {
         public override ExpressionSyntax Visit(ConversionContext context, LambdaExpr lambdaExpr)
         {
-            var parameters = lambdaExpr.getParameters().ToList<Parameter>();
+            var parameters = lambdaExpr.getParameters().ToList<Parameter>() ?? Enumerable.Empty<Parameter>();
             var body = lambdaExpr.getBody();
             var bodyStatementsSyntax = StatementVisitor.VisitStatements(context, new[] {body}).Single();
             var expressionStatementSyntax = bodyStatementsSyntax as ExpressionStatementSyntax;
@@ -21,8 +21,6 @@ namespace JavaToCSharp.Expressions
             if (expressionStatementSyntax != null)
             {
                 lambdaExpression = SyntaxFactory.ParenthesizedLambdaExpression(expressionStatementSyntax.Expression);
-
-
             }
             else
             {

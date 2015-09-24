@@ -175,6 +175,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConversionHelper.cs" />
+    <Compile Include="LambdaExpressionTests.cs" />
     <Compile Include="MethodDeclarationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeExprTests.cs" />
