@@ -79,7 +79,8 @@ namespace JavaToCSharp
                 case "is":
                 case "as":
                 case "base":
-                    return name + "_renamed";
+                case "namespace":
+                    return "@" + name;
                 default:
                     return name;
             }
