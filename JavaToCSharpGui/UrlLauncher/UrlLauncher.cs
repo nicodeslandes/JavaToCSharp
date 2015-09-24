@@ -200,7 +200,7 @@ namespace JavaToCSharpGui.UrlLauncher
         private struct SECURITY_ATTRIBUTES
         {
             public int nLength;
-            public unsafe byte* lpSecurityDescriptor;
+            public IntPtr lpSecurityDescriptor;
             public int bInheritHandle;
         }
 

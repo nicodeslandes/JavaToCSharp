@@ -1,7 +1,6 @@
 ﻿using com.github.javaparser;
 using com.github.javaparser.ast.body;
 using JavaToCSharp.Declarations;
-using JavaToCSharp.Statements;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
