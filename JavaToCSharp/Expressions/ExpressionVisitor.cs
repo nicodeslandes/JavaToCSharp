@@ -52,6 +52,7 @@ namespace JavaToCSharp.Expressions
                 { typeof(UnaryExpr), new UnaryExpressionVisitor() },
                 { typeof(MethodReferenceExpr), new MethodReferenceExpressionVisitor() },
                 { typeof(LambdaExpr), new LambdaExpressionVisitor() },
+                { typeof(TypeExpr), new TypeExpressionVisitor() },
             };
         }
 

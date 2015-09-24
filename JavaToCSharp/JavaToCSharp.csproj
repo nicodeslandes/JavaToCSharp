@@ -193,6 +193,7 @@
     <Compile Include="Expressions\StringLiteralExpressionVisitor.cs" />
     <Compile Include="Expressions\SuperExpressionVisitor.cs" />
     <Compile Include="Expressions\ThisExpressionVisitor.cs" />
+    <Compile Include="Expressions\TypeExpressionVisitor.cs" />
     <Compile Include="Expressions\UnaryExpressionVisitor.cs" />
     <Compile Include="IKVMHelpers.cs" />
     <Compile Include="JavaConversionOptions.cs" />
@@ -222,7 +223,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(NCrunch)' != '1'">
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
